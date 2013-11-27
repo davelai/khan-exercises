@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <html data-require="math math-format graphie interactive">
+    <html data-require="math graphie graphie-helpers interactive">
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>SBG11MQ1</title>
@@ -10,12 +10,12 @@
                 <div class="vars">
                     <!-- y = (x-H)^2 + K -->
                     <var id="H">randRangeNonZero(-7, 7)</var>
-                    <var id="K">randRangeNonZero(-9, 5)</var>
+                    <var id="K">randRangeNonZero(-9, 9)</var>
                 </div>
                 <div class="problems">
                     <div id="translation transformations">
                         <p class="problem" data-apply="prependContents">The graph of <code>y=x^2</code> is shown on the grid.</p>
-                        <p class="question">Drag the graph to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.</p>
+                        <p class="question">Drag the graph's vertex to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.</p>
                             <br>
                             <div class="graphie" id="grid">
                                 graphInit({
@@ -34,14 +34,12 @@
                                 label([11, 0], "x", "right");
 
                                 addMouseLayer();
-
-<!--
-                                graph.func = addInteractiveFn( function(x) {
-                                    return ( x *  x );
-                                }, {});
-                                graph.currParabola = new Parabola(0.25, 0, 0);
+                                
+                                style({
+                                    stroke: KhanUtil.ORANGE
+                                });
+                                graph.currParabola = new Parabola(1, 0, 0);
                                 graph.currParabola.plot();
--->
 
                                 graph.movablePoint = addMovablePoint({
                                     coord: [0, 0],
@@ -50,13 +48,15 @@
                                 });
 
                                 graph.movablePoint.onMove = function(x, y) {
+                                    graph.currParabola.update(1, x, y);
+                                    graph.currParabola.redraw();
                                     return [max(-10, min(x, 10)), max(-10, min(y, 10))];
                                 };
 
                             </div>
                         <div class="solution" data-type="custom">
                             <div class="instruction">
-                                Drag the graph to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.
+                                Drag the graph's vertex to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.
                             </div>
                             <div class="guess">
                                 graph.movablePoint.coord
