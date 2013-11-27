@@ -1,23 +1,122 @@
 <!DOCTYPE html>
-    <html data-require="math">
+    <html data-require="math math-format graphie interactive">
         <head>
-            <title>SBQ1</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <title>SBG11MQ1</title>
             <script src="../khan-exercise.js"></script>
         </head>
         <body>
             <div class="exercise">
                 <div class="vars">
-                    <!-- Your variables in here... -->
+                    <!-- y = (x-H)^2 + K -->
+                    <var id="H">randRangeNonZero(-7, 7)</var>
+                    <var id="K">randRangeNonZero(-9, 5)</var>
                 </div>
                 <div class="problems">
-                    <div id="problem-type-or-description">
-                        <p class="problem"><!-- An overview of the problem including all needed info. --></p>
-                        <p class="question"><!-- The question to ask the student. --></p>
-                        <p class="solution"><!-- The correct answer expected of the student. --></p>
+                    <div id="translation transformations">
+                        <p class="problem" data-apply="prependContents">The graph of <code>y=x^2</code> is shown on the grid.</p>
+                        <p class="question">Drag the graph to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.</p>
+                            <br>
+                            <div class="graphie" id="grid">
+                                graphInit({
+                                    range: 11,
+                                    scale: 20,
+                                    axisArrows: "&lt;-&gt;",
+                                    tickStep: 1,
+                                    labelStep: 1,
+                                    gridOpacity: 0.05,
+                                    axisOpacity: 0.2,
+                                    ticketOpacity: 0.4,
+                                    labelOpacity: 0.5
+                                });
+
+                                label([0, 11], "y", "above");
+                                label([11, 0], "x", "right");
+
+                                addMouseLayer();
+
+<!--
+                                graph.func = addInteractiveFn( function(x) {
+                                    return ( x *  x );
+                                }, {});
+                                graph.currParabola = new Parabola(0.25, 0, 0);
+                                graph.currParabola.plot();
+-->
+
+                                graph.movablePoint = addMovablePoint({
+                                    coord: [0, 0],
+                                    snapY: 1, 
+                                    snapX: 1
+                                });
+
+                                graph.movablePoint.onMove = function(x, y) {
+                                    return [max(-10, min(x, 10)), max(-10, min(y, 10))];
+                                };
+
+                            </div>
+                        <div class="solution" data-type="custom">
+                            <div class="instruction">
+                                Drag the graph to show <code>y = (x - <var>H</var>)^2 + <var>K</var></code>.
+                            </div>
+                            <div class="guess">
+                                graph.movablePoint.coord
+                            </div>
+                            <div class="validator-function">
+                                if (guess[0] === 0 &amp;&amp; guess[1] === 0) {
+                                    return "";
+                                };
+                                return guess[0] === H &amp;&amp; guess[1] === K;
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="hints">
-                    <!--Any hints to show to the student. -->
+                    <p>
+                        From the parent <code>y=x^2</code>, our transformation is given in the form <code>y = (x - \blue{h})^2 + \green{k}</code> where <code>\blue{h=<var>H</var>}</code> and <code>\green{k=<var>K</var>}</code>.
+                    </p>
+                    <p>
+                        <code>\blue{h}</code> tells how many units we shift to the right or left, and <code>\green{k}</code> tells how many units we shift up or down.
+                    </p>
+                    <div>
+                        <p data-if="H > 0">
+                            Since <code>\blue{h}</code> is positive, we shift <code>\blue{<var>abs(H)</var>}</code> units to the right.
+                        </p><p data-else>
+                            Since <code>\blue{h}</code> is negative, we shift <code>\blue{<var>abs(H)</var>}</code> units to the left.
+                        </p>
+                        <div class="graphie" data-update="grid">
+                            style({
+                                stroke: BLUE,
+                                strokeWidth: 3,
+                                arrows: "-&gt;"
+                            }, function() {
+                                line([0, 0], [H, 0]);
+                            });
+                            graph.movablePoint.toFront();
+                        </div>
+                    </div>
+                    <div>
+                        <p data-if="K > 0">
+                            Since <code>\green{k}</code> is positive, we shift <code>\green{<var>abs(K)</var>}</code> units up.
+                        </p><p data-else>
+                            Since <code>\green{k}</code> is negative, we shift <code>\green{<var>abs(K)</var>}</code> units down.
+                        </p>
+                        <div class="graphie" data-update="grid">
+                            style({
+                                stroke: GREEN,
+                                strokeWidth: 3,
+                                arrows: "-&gt;"
+                            }, function() {
+                                line([H, 0], [H, K]);
+                            });
+                            graph.movablePoint.toFront();
+                        </div>
+                    </div>
+                    <div>
+                        <p>
+                            Shift the original graph as marked on the grid.
+                            <input onclick="javascript:KhanUtil.currentGraph.graph.movablePoint.moveTo(KhanUtil.tmpl.getVAR('H'), KhanUtil.tmpl.getVAR('K'));" type="button" value="Show me">
+                        </p>
+                    </div>
                 </div>
             </div>
         </body>
